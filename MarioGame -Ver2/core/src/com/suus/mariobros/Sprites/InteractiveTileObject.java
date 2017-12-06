@@ -3,6 +3,7 @@ package com.suus.mariobros.Sprites;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
@@ -10,19 +11,25 @@ import com.suus.mariobros.MarioBros;
 import com.suus.mariobros.Screens.PlayScreen;
 
 public abstract class InteractiveTileObject {
+
     protected World world;
     protected TiledMap map;
+    protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
     protected PlayScreen screen;
+
     protected MapObject object;
+
+
 
     protected Fixture fixture;
 
+    //Constructor
     public InteractiveTileObject(PlayScreen screen, MapObject object){
         this.object = object;
-        this.screen = screen;
         this.world = screen.getWorld();
+        this.screen = screen;
         this.map = screen.getMap();
         this.bounds = ((RectangleMapObject) object).getRectangle();
 
@@ -30,15 +37,15 @@ public abstract class InteractiveTileObject {
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
+
         bdef.type = BodyDef.BodyType.StaticBody;
-        bdef.position.set((bounds.getX() + bounds.getWidth() / 2) / MarioBros.PPM, (bounds.getY() + bounds.getHeight() / 2) / MarioBros.PPM);
+        bdef.position.set((bounds.getX() + bounds.getWidth() /2) / MarioBros.PPM, (bounds.getY() + bounds.getHeight()/2)/ MarioBros.PPM);
 
         body = world.createBody(bdef);
 
-        shape.setAsBox(bounds.getWidth() / 2 / MarioBros.PPM, bounds.getHeight() / 2 / MarioBros.PPM);
+        shape.setAsBox((bounds.getWidth()/2) / MarioBros.PPM, (bounds.getHeight()/2)/ MarioBros.PPM);
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
-
     }
 
     public abstract void onHeadHit(Mario mario);

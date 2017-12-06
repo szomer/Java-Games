@@ -8,11 +8,11 @@ import com.suus.mariobros.MarioBros;
 import com.suus.mariobros.Screens.PlayScreen;
 import com.suus.mariobros.Sprites.Mario;
 
-public class Mushroom extends Item {
+public class Mushroom extends Item{
     public Mushroom(PlayScreen screen, float x, float y) {
         super(screen, x, y);
-        setRegion(screen.getAtlas().findRegion("mushroom"), 0, 0, 16, 16);
-        velocity = new Vector2(0.7f, 0);
+        setRegion(screen.getAtlas().findRegion("mushroom"), 0, 0, 14, 14);
+        velocity = new Vector2(1.0f, 0);
     }
 
     @Override
@@ -40,6 +40,7 @@ public class Mushroom extends Item {
     public void use(Mario mario) {
         destroy();
         mario.grow();
+
     }
 
     @Override

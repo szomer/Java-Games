@@ -10,12 +10,14 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.suus.mariobros.MarioBros;
 import com.suus.mariobros.Screens.PlayScreen;
+import com.badlogic.gdx.graphics.g2d.Animation;
+
+import javax.xml.soap.Text;
 
 
 public class Turtle extends Enemy {
-    public static final int KICK_LEFT = -2;
-    public static final int KICK_RIGHT = 2;
-    public enum State {WALKING, MOVING_SHELL, STANDING_SHELL}
+
+    public enum State {WALKING, SHELL};
     public State currentState;
     public State previousState;
     private float stateTime;
@@ -29,13 +31,13 @@ public class Turtle extends Enemy {
     public Turtle(PlayScreen screen, float x, float y) {
         super(screen, x, y);
         frames = new Array<TextureRegion>();
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("turtle"), 0, 0, 16, 24));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("turtle"), 16, 0, 16, 24));
-        shell = new TextureRegion(screen.getAtlas().findRegion("turtle"), 64, 0, 16, 24);
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("turtle"), 0,0,16,24));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("turtle"), 16,0,16,24));
+        shell = new TextureRegion(screen.getAtlas().findRegion("turtle"), 64,0,16,24);
         walkAnimation = new Animation(0.2f, frames);
         currentState = previousState = State.WALKING;
 
-        setBounds(getX(), getY(), 16 / MarioBros.PPM, 24 / MarioBros.PPM);
+        setBounds(getX(),getY(), 16 / MarioBros.PPM, 24 / MarioBros.PPM);
 
     }
 
@@ -60,41 +62,43 @@ public class Turtle extends Enemy {
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
 
-        //Create the Head here:
+        //Create Head here
         PolygonShape head = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-5, 8).scl(1 / MarioBros.PPM);
-        vertice[1] = new Vector2(5, 8).scl(1 / MarioBros.PPM);
-        vertice[2] = new Vector2(-3, 3).scl(1 / MarioBros.PPM);
-        vertice[3] = new Vector2(3, 3).scl(1 / MarioBros.PPM);
+        vertice[0] = new Vector2(-4,7).scl(1 /MarioBros.PPM);
+        vertice[1] = new Vector2(4,7).scl(1 /MarioBros.PPM);
+        vertice[2] = new Vector2(-3,3).scl(1 /MarioBros.PPM);
+        vertice[3] = new Vector2(3,3).scl(1 /MarioBros.PPM);
         head.set(vertice);
 
         fdef.shape = head;
-        fdef.restitution = 1.8f;
+        fdef.restitution = 0.5f;
         fdef.filter.categoryBits = MarioBros.ENEMY_HEAD_BIT;
         b2body.createFixture(fdef).setUserData(this);
+
     }
 
     public TextureRegion getFrame(float dt){
         TextureRegion region;
 
         switch (currentState){
-            case MOVING_SHELL:
-            case STANDING_SHELL:
+            case SHELL:
                 region = shell;
                 break;
             case WALKING:
+                region = walkAnimation.getKeyFrame(stateTime, true);
+                break;
             default:
-                region = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
+                region = walkAnimation.getKeyFrame(stateTime, true);
                 break;
         }
 
-        if(velocity.x > 0 && region.isFlipX() == false){
-            region.flip(true, false);
+        if (velocity.x > 0 && region.isFlipX() == false){
+            region.flip(true,false);
+        }if (velocity.x < 0 && region.isFlipX() == true){
+            region.flip(true,false);
         }
-        if(velocity.x < 0 && region.isFlipX() == true){
-            region.flip(true, false);
-        }
+
         stateTime = currentState == previousState ? stateTime + dt : 0;
         //update previous state
         previousState = currentState;
@@ -102,42 +106,26 @@ public class Turtle extends Enemy {
         return region;
     }
 
+
     @Override
     public void update(float dt) {
         setRegion(getFrame(dt));
-        if(currentState == State.STANDING_SHELL && stateTime > 5){
+        if(currentState == State.SHELL && stateTime > 5){
             currentState = State.WALKING;
             velocity.x = 1;
-            System.out.println("WAKE UP SHELL");
         }
 
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - 8 /MarioBros.PPM);
+        setPosition(b2body.getPosition().x - getWidth()/2, b2body.getPosition().y - getHeight() /2);
         b2body.setLinearVelocity(velocity);
     }
 
     @Override
     public void hitOnHead(Mario mario) {
-        if(currentState == State.STANDING_SHELL) {
-            if(mario.b2body.getPosition().x > b2body.getPosition().x)
-                velocity.x = -2;
-            else
-                velocity.x = 2;
-            currentState = State.MOVING_SHELL;
-            System.out.println("Set to moving shell");
-        }
-        else {
-            currentState = State.STANDING_SHELL;
+
+        if(currentState != State.SHELL){
+            currentState = State.SHELL;
             velocity.x = 0;
         }
-    }
 
-    @Override
-    public void hitByEnemy(Enemy enemy) {
-        reverseVelocity(true, false);
-    }
-
-    public void kick(int direction){
-        velocity.x = direction;
-        currentState = State.MOVING_SHELL;
     }
 }

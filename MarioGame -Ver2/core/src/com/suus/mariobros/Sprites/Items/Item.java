@@ -9,8 +9,8 @@ import com.suus.mariobros.MarioBros;
 import com.suus.mariobros.Screens.PlayScreen;
 import com.suus.mariobros.Sprites.Mario;
 
+public abstract class Item extends Sprite{
 
-public abstract class Item extends Sprite {
     protected PlayScreen screen;
     protected World world;
     protected Vector2 velocity;
@@ -18,41 +18,42 @@ public abstract class Item extends Sprite {
     protected boolean destroyed;
     protected Body body;
 
-    public Item(PlayScreen screen, float x, float y) {
+    public Item(PlayScreen screen, float x, float y){
         this.screen = screen;
         this.world = screen.getWorld();
+        setPosition(x,y);
+        setBounds(getX(),getY(), 16 / MarioBros.PPM, 16 / MarioBros.PPM);
+        defineItem();
         toDestroy = false;
         destroyed = false;
-
-        setPosition(x, y);
-        setBounds(getX(), getY(), 16 / MarioBros.PPM, 16 / MarioBros.PPM);
-        defineItem();
     }
 
-    public abstract void defineItem();
 
+    public abstract void defineItem();
     public abstract void use(Mario mario);
 
-    public void update(float dt) {
-        if (toDestroy && !destroyed) {
+    public void update(float dt){
+        if(toDestroy && !destroyed){
             world.destroyBody(body);
             destroyed = true;
         }
     }
 
-    public void draw(Batch batch) {
-        if (!destroyed)
+    public void draw(Batch batch){
+        if(!destroyed){
             super.draw(batch);
+        }
     }
 
-    public void destroy() {
+    public void destroy(){
         toDestroy = true;
     }
 
-    public void reverseVelocity(boolean x, boolean y) {
-        if (x)
+    public void reverceVelocity(boolean x, boolean y){
+        if(x)
             velocity.x = -velocity.x;
-        if (y)
+        if(y)
             velocity.y = -velocity.y;
     }
+
 }

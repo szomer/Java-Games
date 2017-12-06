@@ -13,16 +13,13 @@ import com.badlogic.gdx.utils.Array;
 import com.suus.mariobros.MarioBros;
 import com.suus.mariobros.Screens.PlayScreen;
 
+public class Goomba extends Enemy {
 
-
-public class Goomba extends Enemy{
     private float stateTime;
     private Animation<TextureRegion> walkAnimation;
     private Array<TextureRegion> frames;
     private boolean setToDestroy;
     private boolean destroyed;
-    float angle;
-
 
     public Goomba(PlayScreen screen, float x, float y) {
         super(screen, x, y);
@@ -34,21 +31,20 @@ public class Goomba extends Enemy{
         setBounds(getX(), getY(), 16 / MarioBros.PPM, 16 / MarioBros.PPM);
         setToDestroy = false;
         destroyed = false;
-        angle = 0;
     }
 
     public void update(float dt){
         stateTime += dt;
+
         if(setToDestroy && !destroyed){
             world.destroyBody(b2body);
             destroyed = true;
             setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), 32, 0, 16, 16));
             stateTime = 0;
-        }
-        else if(!destroyed) {
+        } else if(!destroyed) {
             b2body.setLinearVelocity(velocity);
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-            setRegion( walkAnimation.getKeyFrame(stateTime, true));
+            setRegion(walkAnimation.getKeyFrame(stateTime, true));
         }
     }
 
@@ -73,13 +69,13 @@ public class Goomba extends Enemy{
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
 
-        //Create the Head here:
+        //Create Head here
         PolygonShape head = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-5, 8).scl(1 / MarioBros.PPM);
-        vertice[1] = new Vector2(5, 8).scl(1 / MarioBros.PPM);
-        vertice[2] = new Vector2(-3, 3).scl(1 / MarioBros.PPM);
-        vertice[3] = new Vector2(3, 3).scl(1 / MarioBros.PPM);
+        vertice[0] = new Vector2(-4,7).scl(1 /MarioBros.PPM);
+        vertice[1] = new Vector2(4,7).scl(1 /MarioBros.PPM);
+        vertice[2] = new Vector2(-3,3).scl(1 /MarioBros.PPM);
+        vertice[3] = new Vector2(3,3).scl(1 /MarioBros.PPM);
         head.set(vertice);
 
         fdef.shape = head;
@@ -90,23 +86,14 @@ public class Goomba extends Enemy{
     }
 
     public void draw(Batch batch){
-        if(!destroyed || stateTime < 1)
-            super.draw(batch);
+        if(!destroyed || stateTime <1);
+        super.draw(batch);
     }
-
-
 
     @Override
     public void hitOnHead(Mario mario) {
         setToDestroy = true;
         MarioBros.manager.get("audio/sounds/stomp.wav", Sound.class).play();
-    }
 
-    @Override
-    public void hitByEnemy(Enemy enemy) {
-        if(enemy instanceof Turtle && ((Turtle) enemy).currentState == Turtle.State.MOVING_SHELL)
-            setToDestroy = true;
-        else
-            reverseVelocity(true, false);
     }
 }
