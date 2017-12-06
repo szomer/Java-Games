@@ -10,16 +10,12 @@ package com.suus.mariobros.Sprites.Items;
         import com.badlogic.gdx.physics.box2d.BodyDef;
         import com.badlogic.gdx.physics.box2d.CircleShape;
         import com.badlogic.gdx.physics.box2d.FixtureDef;
-        import com.badlogic.gdx.physics.box2d.PolygonShape;
         import com.badlogic.gdx.physics.box2d.World;
         import com.badlogic.gdx.utils.Array;
         import com.suus.mariobros.MarioBros;
         import com.suus.mariobros.Screens.PlayScreen;
 
 
-/**
- * Created by brentaureli on 10/12/15.
- */
 public class FireBall extends Sprite {
 
     PlayScreen screen;

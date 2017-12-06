@@ -10,9 +10,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.suus.mariobros.MarioBros;
 import com.suus.mariobros.Screens.PlayScreen;
-import com.badlogic.gdx.graphics.g2d.Animation;
-
-import javax.xml.soap.Text;
 
 
 public class Turtle extends Enemy {

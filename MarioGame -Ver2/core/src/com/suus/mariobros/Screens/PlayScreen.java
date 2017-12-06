@@ -24,12 +24,8 @@ import com.suus.mariobros.Sprites.Items.Mushroom;
 import com.suus.mariobros.Sprites.Mario;
 import com.suus.mariobros.Tools.B2WorldCreator;
 import com.suus.mariobros.Tools.WorldContactListener;
-
 import java.util.concurrent.LinkedBlockingQueue;
 
-/**
- * Created by brentaureli on 8/14/15.
- */
 public class PlayScreen implements Screen{
     //Reference to our Game, used to set Screens
     private MarioBros game;

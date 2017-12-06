@@ -98,9 +98,6 @@ public class Mario extends Sprite {
     public void update(float dt){
 
         // time is up : too late mario dies T_T
-        // the !isDead() method is used to prevent multiple invocation
-        // of "die music" and jumping
-        // there is probably better ways to do that but it works for now.
         if (screen.getHud().isTimeUp() && !isDead()) {
             die();
         }

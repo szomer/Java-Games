@@ -4,14 +4,10 @@ package com.suus.mariobros;
 use it is to pass around to the classes that need it. In this game it is used in a static way.
  */
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.suus.mariobros.Screens.PlayScreen;
 
@@ -37,9 +33,6 @@ public class MarioBros extends Game {
 
 	public SpriteBatch batch;
 
-	/* WARNING Using AssetManager in a static way can cause issues, especially on Android.
-	Instead you may want to pass around Assetmanager to those the classes that need it.
-	We will use it in the static context to save time for now. */
 	public static AssetManager manager;
 
 	@Override
